@@ -1,25 +1,9 @@
-# Welcome to your new ignited app!
-
-[![CircleCI](https://circleci.com/gh/infinitered/ignite.svg?style=svg)](https://circleci.com/gh/infinitered/ignite)
-
-## The latest and greatest boilerplate for Infinite Red opinions
-
-This is the boilerplate that [Infinite Red](https://infinite.red) uses as a way to test bleeding-edge changes to our React Native stack.
-
-Currently includes:
-
-- React Native
-- React Navigation
-- MobX State Tree
-- TypeScript
-- And more!
+# Welcome to TODO app
 
 ## Quick Start
 
-The Ignite boilerplate project's structure will look similar to this:
-
 ```
-ignite-project
+todo-project
 ├── app
 │   ├── components
 │   ├── config
@@ -121,10 +105,3 @@ This directory will hold your Jest configs and mocks.
 ## Running Detox end-to-end tests
 
 Read [Detox setup instructions](./detox/README.md).
-
-## Previous Boilerplates
-
-- [2018 aka Bowser](https://github.com/infinitered/ignite-bowser)
-- [2017 aka Andross](https://github.com/infinitered/ignite-andross)
-- [2016 aka Ignite 1.0](https://github.com/infinitered/ignite-ir-boilerplate-2016)
-
