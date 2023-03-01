@@ -7,6 +7,15 @@ const plugins = [
   ],
   ["@babel/plugin-proposal-optional-catch-binding"],
   "react-native-reanimated/plugin", // NOTE: this must be last in the plugins
+  [
+    "babel-plugin-root-import",
+    {
+      root: __dirname,
+      rootPathPrefix: "~/",
+      // mapping ~/ to the ./app directory (again, your app structure may differ here)
+      rootPathSuffix: "app",
+    },
+  ],
 ]
 
 const vanillaConfig = {
