@@ -8,13 +8,15 @@ import {
   DarkTheme,
   DefaultTheme,
   NavigationContainer,
-  NavigatorScreenParams, // @demo remove-current-line
+  NavigatorScreenParams,
+  RouteProp, // @demo remove-current-line
 } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { StackScreenProps } from "@react-navigation/stack"
+import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import React from "react"
 import { useColorScheme } from "react-native"
+import { AddNewTodo } from "~/screens/AddNew"
 import Config from "../config"
 import { useStores } from "../models" // @demo remove-current-line
 import {
@@ -44,6 +46,7 @@ export type AppStackParamList = {
   Demo: NavigatorScreenParams<DemoTabParamList> // @demo remove-current-line
   // 🔥 Your screens go here
   HomeScreen: undefined
+  AddNewTodo: undefined
 }
 
 /**
@@ -53,6 +56,12 @@ export type AppStackParamList = {
 const exitRoutes = Config.exitRoutes
 
 export type AppStackScreenProps<T extends keyof AppStackParamList> = StackScreenProps<
+  AppStackParamList,
+  T
+>
+
+export type AppRouteProps<T extends keyof AppStackParamList> = RouteProp<AppStackParamList, T>
+export type AppStackProps<T extends keyof AppStackParamList> = StackNavigationProp<
   AppStackParamList,
   T
 >
@@ -76,6 +85,11 @@ const AppStack = observer(function AppStack() {
       {isAuthenticated ? (
         <>
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
+          <Stack.Screen
+            name="AddNewTodo"
+            component={AddNewTodo}
+            options={{ presentation: "modal" }}
+          />
           {/* @demo remove-block-end */}
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           {/* @demo remove-block-start */}

@@ -9,6 +9,7 @@ import {
   View,
   ViewStyle,
 } from "react-native"
+import { colors } from "~/theme"
 
 export type IconTypes = keyof typeof iconRegistry
 
@@ -53,7 +54,7 @@ interface IconProps extends TouchableOpacityProps {
 export function Icon(props: IconProps) {
   const {
     icon,
-    color,
+    color = colors.white,
     size,
     style: $imageStyleOverride,
     containerStyle: $containerStyleOverride,

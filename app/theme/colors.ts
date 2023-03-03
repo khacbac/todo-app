@@ -59,7 +59,7 @@ export const colors = {
   /**
    * The default color of the screen background.
    */
-  background: palette.neutral200,
+  background: "#1C1917",
   /**
    * The default border color.
    */
@@ -71,7 +71,7 @@ export const colors = {
   /**
    * A subtle color used for lines.
    */
-  separator: palette.neutral300,
+  separator: palette.neutral500,
   /**
    * Error messages.
    */
@@ -81,4 +81,7 @@ export const colors = {
    *
    */
   errorBackground: palette.angry100,
+  white: "#ffffff",
+  warmGray700: "#44403C",
+  warmGray400: "#A8A29E",
 }

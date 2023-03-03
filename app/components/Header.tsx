@@ -270,6 +270,7 @@ const $container: ViewStyle = {
 
 const $title: TextStyle = {
   textAlign: "center",
+  color: colors.white,
 }
 
 const $actionTextContainer: ViewStyle = {
