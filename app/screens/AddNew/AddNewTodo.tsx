@@ -11,7 +11,8 @@ import { useHeader } from "~/utils/useHeader"
 interface AddNewTodoProps extends AppStackScreenProps<"AddNewTodo"> {}
 
 const AddNewTodoScreen: FC<AddNewTodoProps> = observer(function AddNewTodoScreen(_props) {
-  const { navigation } = _props
+  const { navigation, route } = _props
+  const { focusDay } = route.params
   const {
     todoStore: { addTodo },
   } = useStores()
@@ -27,7 +28,13 @@ const AddNewTodoScreen: FC<AddNewTodoProps> = observer(function AddNewTodoScreen
       onLeftPress: navigation.goBack,
       onRightPress: () => {
         if (title) {
-          const todo = TodoModel.create({ title, description, uuid: Date.now().toString() })
+          const todo = TodoModel.create({
+            title,
+            description,
+            uuid: Date.now().toString(),
+            createdAt: focusDay,
+            updatedAt: focusDay,
+          })
           addTodo(todo)
           navigation.goBack()
         }
