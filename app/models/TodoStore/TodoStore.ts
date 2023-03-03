@@ -7,8 +7,6 @@ export const TodoStoreModel = types
   .model("TodoStore")
   .props({
     todos: types.array(TodoModel),
-    // today
-    focusDay: new Date(),
   })
   .views((store) => ({
     focusWeekTodos(day: Date) {
@@ -16,18 +14,18 @@ export const TodoStoreModel = types
       const todosOfWeek = daysOfWeek.map((d) => {
         return {
           uuid: new Date(d).toISOString(),
-          todos: store.todos.filter((e) => isSameDay(e.updatedAt, d)),
+          todos: store.todos.filter((e) => isSameDay(e.updatedAt, d) && !e.completed),
         }
       }, {})
       return todosOfWeek
     },
   }))
   .actions((store) => ({
-    addTodo(todo: Todo) {
+    addTask(todo: Todo) {
       store.todos.push(todo)
     },
-    setFocusDay(day: Date) {
-      store.focusDay = day
+    completeTask(todo: Todo) {
+      todo.setProp("completed", true)
     },
   }))
 

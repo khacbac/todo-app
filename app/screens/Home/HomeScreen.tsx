@@ -1,15 +1,9 @@
-import { addDays, addHours, format, isSameDay, startOfDay, startOfWeek } from "date-fns"
+import { format, isSameDay } from "date-fns"
 import { observer } from "mobx-react-lite"
 import React, { FC, useRef } from "react"
-import {
-  Dimensions,
-  FlatList,
-  ListRenderItem,
-  TouchableOpacity,
-  View,
-  ViewStyle,
-} from "react-native"
+import { FlatList, ListRenderItem, TouchableOpacity, View, ViewStyle } from "react-native"
 import { Button, Text, Toggle } from "~/components"
+import { DEFAULT_DATE_FORMAT, WINDOW_WIDTH } from "~/constants"
 import { useStores } from "~/models"
 import { Todo } from "~/models/TodoStore"
 import { AppStackScreenProps } from "~/navigators"
@@ -19,20 +13,10 @@ import useHomeScreen from "./useHomeScreen"
 
 interface HomeProps extends AppStackScreenProps<"HomeScreen"> {}
 
-const WINDOW_WIDTH = Dimensions.get("window").width
-const getDaysOfThisWeek = () => {
-  const startDayOfWeek = startOfWeek(new Date())
-  return Array(7)
-    .fill(null)
-    .map((_, index) => {
-      return addDays(startDayOfWeek, index)
-    })
-}
-
 const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
   const { navigation } = _props
   const {
-    todoStore: { todos, focusWeekTodos },
+    todoStore: { completeTask, focusWeekTodos },
   } = useStores()
   const $containerSafeArea = useSafeAreaInsetsStyle(["top"])
   const $buttonSafeArea = useSafeAreaInsetsStyle(["bottom"])
@@ -49,9 +33,16 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
   const renderItem: ListRenderItem<Todo> = ({ item }) => {
     return (
       <View style={$itemWrapper}>
-        <Toggle value={true} onValueChange={() => {}} variant="radio" />
+        <Toggle
+          value={item.completed}
+          onValueChange={() => {
+            completeTask(item)
+          }}
+          variant="radio"
+        />
         <View style={$itemContentWrapper}>
-          <Text text={`${item.title}`} />
+          <Text text={`${item.title}`} size="sm" weight="semiBold" />
+          <Text text={`${item.description}`} size="xxs" numberOfLines={2} weight="normal" />
         </View>
       </View>
     )
@@ -77,16 +68,16 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
                 flex: 1,
                 justifyContent: "center",
                 alignItems: "center",
-                backgroundColor: isFocus ? "red" : colors.background,
+                backgroundColor: isFocus ? colors.tint : colors.background,
                 borderRadius: 16,
                 paddingVertical: 8,
               }}
               onPress={() => {
                 setFocusDay(day)
-                horizontalScrollRef.current?.scrollToIndex({ animated: true, index: i })
+                horizontalScrollRef.current?.scrollToIndex({ animated: false, index: i })
               }}
             >
-              <Text text={format(day, "EEE")} />
+              <Text text={format(day, "EEE")} weight="semiBold" />
               <Text text={format(day, "d")} />
             </TouchableOpacity>
           )
@@ -121,6 +112,10 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
         renderItem={({ item }) => {
           return (
             <View style={{ width: WINDOW_WIDTH }}>
+              <Text
+                text={format(new Date(item.uuid), DEFAULT_DATE_FORMAT)}
+                style={{ marginTop: spacing.extraSmall, alignSelf: "center" }}
+              />
               <FlatList
                 data={item.todos}
                 renderItem={renderItem}

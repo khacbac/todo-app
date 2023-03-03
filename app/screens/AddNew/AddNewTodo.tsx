@@ -1,7 +1,9 @@
+import { format } from "date-fns"
 import { observer } from "mobx-react-lite"
 import React, { FC, useState } from "react"
 import { TextStyle, View, ViewStyle } from "react-native"
 import { TextField } from "~/components"
+import { DEFAULT_DATE_FORMAT } from "~/constants"
 import { useStores } from "~/models"
 import { TodoModel } from "~/models/TodoStore"
 import { AppStackScreenProps } from "~/navigators"
@@ -14,14 +16,14 @@ const AddNewTodoScreen: FC<AddNewTodoProps> = observer(function AddNewTodoScreen
   const { navigation, route } = _props
   const { focusDay } = route.params
   const {
-    todoStore: { addTodo },
+    todoStore: { addTask },
   } = useStores()
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
 
   useHeader(
     {
-      title: "New Todo",
+      title: format(focusDay, DEFAULT_DATE_FORMAT),
       leftTx: "common.cancel",
       rightTx: "common.add",
       safeAreaEdges: [],
@@ -35,7 +37,7 @@ const AddNewTodoScreen: FC<AddNewTodoProps> = observer(function AddNewTodoScreen
             createdAt: focusDay,
             updatedAt: focusDay,
           })
-          addTodo(todo)
+          addTask(todo)
           navigation.goBack()
         }
       },
