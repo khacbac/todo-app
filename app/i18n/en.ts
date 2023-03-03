@@ -121,6 +121,13 @@ const en = {
     },
   },
   // @demo remove-block-end
+  home: {
+    addTaskBtn: "Add New Task",
+  },
+  addNewTask: {
+    titlePlh: "Task Name",
+    descriptionPlh: "Description",
+  },
 }
 
 export default en

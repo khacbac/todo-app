@@ -71,7 +71,7 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
               }}
             >
               <Text text={format(day, "EEE")} weight="semiBold" />
-              <Text text={format(day, "d")} />
+              <Text text={format(day, "d")} style={$headerDayText} />
             </TouchableOpacity>
           )
         })}
@@ -97,7 +97,11 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
         renderItem={({ item }) => {
           return (
             <View style={{ width: WINDOW_WIDTH }}>
-              <Text text={format(new Date(item.uuid), DEFAULT_DATE_FORMAT)} style={$focusDayText} />
+              <Text
+                text={format(new Date(item.uuid), DEFAULT_DATE_FORMAT)}
+                style={$focusDayText}
+                weight="medium"
+              />
               <FlatList
                 data={item.todos}
                 renderItem={renderItem}
@@ -119,7 +123,7 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
         }}
       />
       <View style={[$buttonSafeArea, $buttonWrapper]}>
-        <Button text="Add New Todo" style={$button} onPress={gotoAddNewTodo} />
+        <Button tx="home.addTaskBtn" style={$button} onPress={gotoAddNewTodo} />
       </View>
     </View>
   )
@@ -189,4 +193,7 @@ const $separator: ViewStyle = {
 const $focusDayText: TextStyle = {
   marginTop: spacing.extraSmall,
   alignSelf: "center",
+  color: colors.tint,
 }
+
+const $headerDayText: TextStyle = { marginTop: spacing.tiny }

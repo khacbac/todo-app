@@ -48,10 +48,16 @@ const AddNewTodoScreen: FC<AddNewTodoProps> = observer(function AddNewTodoScreen
   return (
     <View style={container}>
       <View style={$inputSection}>
-        <TextField placeholder="title" inputWrapperStyle={$inputWrapper} onChangeText={setTitle} />
+        <TextField
+          placeholderTx="addNewTask.titlePlh"
+          inputWrapperStyle={$inputWrapper}
+          onChangeText={setTitle}
+          style={$input}
+          autoFocus
+        />
         <View style={$indicator} />
         <TextField
-          placeholder="description"
+          placeholderTx="addNewTask.descriptionPlh"
           inputWrapperStyle={$inputWrapper}
           multiline
           style={$descriptionInput}
@@ -75,6 +81,7 @@ const $inputSection: ViewStyle = {
   overflow: "hidden",
   paddingHorizontal: spacing.extraSmall,
   backgroundColor: colors.warmGray700,
+  marginTop: spacing.extraSmall,
 }
 
 const $inputWrapper: ViewStyle = {
@@ -87,4 +94,5 @@ const $indicator: ViewStyle = {
   height: 0.5,
 }
 
-const $descriptionInput: TextStyle = { maxHeight: 150 }
+const $input: TextStyle = { marginHorizontal: 0 }
+const $descriptionInput: TextStyle = { ...$input, maxHeight: 150, fontSize: 16 }
