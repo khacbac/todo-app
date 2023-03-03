@@ -46,7 +46,7 @@ export type AppStackParamList = {
   Demo: NavigatorScreenParams<DemoTabParamList> // @demo remove-current-line
   // 🔥 Your screens go here
   HomeScreen: undefined
-  AddNewTodo: undefined
+  AddNewTodo: { focusDay: Date }
 }
 
 /**

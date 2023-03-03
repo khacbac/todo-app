@@ -1,18 +1,17 @@
-import { addDays, addHours, endOfWeek, format, isSameDay, startOfDay, startOfWeek } from "date-fns"
+import { addDays, addHours, format, isSameDay, startOfDay, startOfWeek } from "date-fns"
 import { observer } from "mobx-react-lite"
-import React, { FC, useRef, useState } from "react"
+import React, { FC, useRef } from "react"
 import {
   Dimensions,
   FlatList,
   ListRenderItem,
-  ScrollView,
   TouchableOpacity,
   View,
   ViewStyle,
 } from "react-native"
-import { Agenda } from "react-native-calendars"
-import { Button, Text } from "~/components"
+import { Button, Text, Toggle } from "~/components"
 import { useStores } from "~/models"
+import { Todo } from "~/models/TodoStore"
 import { AppStackScreenProps } from "~/navigators"
 import { colors, spacing } from "~/theme"
 import { useSafeAreaInsetsStyle } from "~/utils/useSafeAreaInsetsStyle"
@@ -30,41 +29,29 @@ const getDaysOfThisWeek = () => {
     })
 }
 
-const getHousesOfADayStrings = () => {
-  const startOfADay = startOfDay(new Date())
-  return Array(24)
-    .fill(null)
-    .map((_, index) => {
-      return format(addHours(startOfADay, index), "HH:mm")
-    })
-}
-
 const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
   const { navigation } = _props
-  const {} = useStores()
+  const {
+    todoStore: { todos, focusWeekTodos },
+  } = useStores()
   const $containerSafeArea = useSafeAreaInsetsStyle(["top"])
   const $buttonSafeArea = useSafeAreaInsetsStyle(["bottom"])
-  const [focusDay, setFocusDay] = useState(new Date())
   const horizontalScrollRef = useRef<FlatList>()
 
-  const { gotoAddNewTodo } = useHomeScreen()
+  const {
+    gotoAddNewTodo,
+    states: { focusDay, setFocusDay },
+  } = useHomeScreen()
 
-  const days = getDaysOfThisWeek()
+  const weekTodos = focusWeekTodos(focusDay)
+  const initIndex = weekTodos.findIndex((e) => isSameDay(new Date(e.uuid), focusDay))
 
-  const renderItem: ListRenderItem<any> = ({ item, index }) => {
+  const renderItem: ListRenderItem<Todo> = ({ item }) => {
     return (
       <View style={$itemWrapper}>
-        <View
-          style={{
-            width: 24,
-            height: 24,
-            borderWidth: 1,
-            borderRadius: 24,
-            borderColor: colors.white,
-          }}
-        />
+        <Toggle value={true} onValueChange={() => {}} variant="radio" />
         <View style={$itemContentWrapper}>
-          <Text text={`Task ${index}`} />
+          <Text text={`${item.title}`} />
         </View>
       </View>
     )
@@ -79,7 +66,8 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
           paddingVertical: spacing.extraSmall,
         }}
       >
-        {days.map((day, i) => {
+        {weekTodos.map((dt, i) => {
+          const day = new Date(dt.uuid)
           const isFocus = isSameDay(focusDay, day)
           return (
             <TouchableOpacity
@@ -121,14 +109,20 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
       />
       <FlatList
         ref={horizontalScrollRef}
-        data={days}
+        data={weekTodos}
         horizontal
         pagingEnabled
-        renderItem={() => {
+        initialScrollIndex={initIndex}
+        getItemLayout={(data, index) => ({
+          length: WINDOW_WIDTH,
+          offset: WINDOW_WIDTH * index,
+          index,
+        })}
+        renderItem={({ item }) => {
           return (
-            <View style={{ width: Dimensions.get("window").width }}>
+            <View style={{ width: WINDOW_WIDTH }}>
               <FlatList
-                data={Array(10).fill(null)}
+                data={item.todos}
                 renderItem={renderItem}
                 keyExtractor={(_, index) => String(index)}
                 contentContainerStyle={$contentContainerStyle}
@@ -141,9 +135,9 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
         onMomentumScrollEnd={(e) => {
           const { x } = e.nativeEvent.contentOffset
           const index = Math.floor(x / WINDOW_WIDTH)
-          const item = days.find((_, i) => i === index)
+          const item = weekTodos.find((_, i) => i === index)
           if (item) {
-            setFocusDay(item)
+            setFocusDay(new Date(item.uuid))
           }
         }}
       />
