@@ -1,7 +1,14 @@
 import { format, isSameDay } from "date-fns"
 import { observer } from "mobx-react-lite"
 import React, { FC, useRef } from "react"
-import { FlatList, ListRenderItem, TouchableOpacity, View, ViewStyle } from "react-native"
+import {
+  FlatList,
+  ListRenderItem,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from "react-native"
 import { Button, Text, Toggle } from "~/components"
 import { DEFAULT_DATE_FORMAT, WINDOW_WIDTH } from "~/constants"
 import { useStores } from "~/models"
@@ -14,7 +21,6 @@ import useHomeScreen from "./useHomeScreen"
 interface HomeProps extends AppStackScreenProps<"HomeScreen"> {}
 
 const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
-  const { navigation } = _props
   const {
     todoStore: { completeTask, focusWeekTodos },
   } = useStores()
@@ -50,13 +56,7 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
 
   const renderHeader = () => {
     return (
-      <View
-        style={{
-          flexDirection: "row",
-          paddingHorizontal: spacing.medium,
-          paddingVertical: spacing.extraSmall,
-        }}
-      >
+      <View style={$headerWrapper}>
         {weekTodos.map((dt, i) => {
           const day = new Date(dt.uuid)
           const isFocus = isSameDay(focusDay, day)
@@ -64,14 +64,7 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
             <TouchableOpacity
               activeOpacity={0.8}
               key={String(i)}
-              style={{
-                flex: 1,
-                justifyContent: "center",
-                alignItems: "center",
-                backgroundColor: isFocus ? colors.tint : colors.background,
-                borderRadius: 16,
-                paddingVertical: 8,
-              }}
+              style={[$headerItemWrapper, isFocus && $headerItemFocusWrapper]}
               onPress={() => {
                 setFocusDay(day)
                 horizontalScrollRef.current?.scrollToIndex({ animated: false, index: i })
@@ -89,15 +82,7 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
   return (
     <View style={[$container, $containerSafeArea]}>
       {renderHeader()}
-      <View
-        style={{
-          height: 1,
-          backgroundColor: "rgba(0,0,0,0.5)",
-          marginHorizontal: spacing.medium,
-          marginTop: spacing.extraSmall,
-          marginBottom: spacing.tiny,
-        }}
-      />
+      <View style={$separator} />
       <FlatList
         ref={horizontalScrollRef}
         data={weekTodos}
@@ -112,10 +97,7 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
         renderItem={({ item }) => {
           return (
             <View style={{ width: WINDOW_WIDTH }}>
-              <Text
-                text={format(new Date(item.uuid), DEFAULT_DATE_FORMAT)}
-                style={{ marginTop: spacing.extraSmall, alignSelf: "center" }}
-              />
+              <Text text={format(new Date(item.uuid), DEFAULT_DATE_FORMAT)} style={$focusDayText} />
               <FlatList
                 data={item.todos}
                 renderItem={renderItem}
@@ -126,7 +108,7 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
             </View>
           )
         }}
-        keyExtractor={(_, index) => String(index)}
+        keyExtractor={(item) => String(item.uuid)}
         onMomentumScrollEnd={(e) => {
           const { x } = e.nativeEvent.contentOffset
           const index = Math.floor(x / WINDOW_WIDTH)
@@ -150,13 +132,32 @@ const $container: ViewStyle = {
   backgroundColor: colors.background,
 }
 
+const $headerWrapper: ViewStyle = {
+  flexDirection: "row",
+  paddingHorizontal: spacing.medium,
+  paddingVertical: spacing.extraSmall,
+}
+
+const $headerItemWrapper: ViewStyle = {
+  flex: 1,
+  justifyContent: "center",
+  alignItems: "center",
+  backgroundColor: colors.background,
+  borderRadius: 16,
+  paddingVertical: 8,
+}
+const $headerItemFocusWrapper: ViewStyle = {
+  ...$headerItemWrapper,
+  backgroundColor: colors.tint,
+}
+
 const $contentContainerStyle: ViewStyle = {
   paddingTop: spacing.medium,
   paddingHorizontal: spacing.medium,
 }
 
 const $itemSeparator: ViewStyle = {
-  height: 1,
+  height: 0.5,
   backgroundColor: colors.border,
   marginLeft: 40,
 }
@@ -175,4 +176,17 @@ const $itemContentWrapper: ViewStyle = {
 const $buttonWrapper: ViewStyle = { position: "absolute", bottom: 0, left: 16, right: 16 }
 const $button: ViewStyle = {
   marginBottom: spacing.extraSmall,
+}
+
+const $separator: ViewStyle = {
+  height: 0.5,
+  backgroundColor: colors.separator,
+  marginHorizontal: spacing.medium,
+  marginTop: spacing.extraSmall,
+  marginBottom: spacing.tiny,
+}
+
+const $focusDayText: TextStyle = {
+  marginTop: spacing.extraSmall,
+  alignSelf: "center",
 }
