@@ -6,6 +6,7 @@ import { Text, Toggle } from "~/components"
 import { Todo } from "~/models/TodoStore"
 import { AppStackProps } from "~/navigators"
 import { spacing } from "~/theme"
+import { getPriorityColor } from "~/utils/common.utils"
 
 type TodoItemProps = ListRenderItemInfo<Todo>
 
@@ -27,7 +28,12 @@ export const TodoItem: FC<TodoItemProps> = observer(function TodoItem(_props) {
         variant="radio"
       />
       <View style={$itemContentWrapper}>
-        <Text text={`${item.title}`} size="sm" weight="semiBold" />
+        <Text
+          text={`${item.title}`}
+          size="sm"
+          weight="semiBold"
+          style={{ color: getPriorityColor(item) }}
+        />
         <Text text={`${item.description}`} size="xxs" numberOfLines={2} weight="normal" />
       </View>
     </TouchableOpacity>

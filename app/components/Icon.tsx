@@ -13,7 +13,7 @@ import { colors } from "~/theme"
 
 export type IconTypes = keyof typeof iconRegistry
 
-interface IconProps extends TouchableOpacityProps {
+export interface IconProps extends TouchableOpacityProps {
   /**
    * The name of the icon
    */

@@ -82,6 +82,17 @@ export const colors = {
    */
   errorBackground: palette.angry100,
   white: "#ffffff",
-  warmGray700: "#44403C",
   warmGray400: "#A8A29E",
+  warmGray600: "#57534E",
+  warmGray700: "#44403C",
+  warmGray800: "#292524",
+  warmGray900: "#1C1917",
+
+  white100: "#FAFAF9",
+  white90: "rgba(250, 250, 249, 0.9)",
+  white80: "rgba(250, 250, 249, 0.8)",
+  white50: "rgba(250, 250, 249, 0.5)",
+  white30: "rgba(250, 250, 249, 0.3)",
+  white16: "rgba(250, 250, 249, 0.16)",
+  white9: "rgba(250, 250, 249, 0.09)",
 }

@@ -1,4 +1,5 @@
 import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
+import { TaskPriotityEnum } from "~/types"
 import { withSetPropAction } from "../helpers/withSetPropAction"
 
 export const TodoModel = types
@@ -10,15 +11,17 @@ export const TodoModel = types
     createdAt: new Date(),
     updatedAt: new Date(),
     completed: false,
+    priority: TaskPriotityEnum.LOW,
   })
   .actions(withSetPropAction)
   .actions((store) => ({
     toggle() {
       store.completed = !store.completed
     },
-    update(title: string, description: string) {
-      store.title = title
-      store.description = description
+    update(params: { title: string; description: string; priority: TaskPriotityEnum }) {
+      store.title = params.title
+      store.description = params.description
+      store.priority = params.priority
     },
   }))
 
