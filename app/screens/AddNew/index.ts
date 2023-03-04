@@ -1,1 +1,1 @@
-export { default as AddNewTodo } from "./AddNewTodo"
+export * from "./AddNewTodo"

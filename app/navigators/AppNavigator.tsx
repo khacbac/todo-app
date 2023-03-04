@@ -4,29 +4,16 @@
  * Generally speaking, it will contain an auth flow (registration, login, forgot password)
  * and a "main" flow which the user will use once logged in.
  */
-import {
-  DarkTheme,
-  DefaultTheme,
-  NavigationContainer,
-  NavigatorScreenParams,
-  RouteProp, // @demo remove-current-line
-} from "@react-navigation/native"
+import { DarkTheme, DefaultTheme, NavigationContainer, RouteProp } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import React from "react"
 import { useColorScheme } from "react-native"
 import { Todo } from "~/models/TodoStore"
-import { AddNewTodo } from "~/screens/AddNew"
 import Config from "../config"
-import { useStores } from "../models" // @demo remove-current-line
-import {
-  CalendarScreen,
-  HomeScreen,
-  LoginScreen, // @demo remove-current-line
-  WelcomeScreen,
-} from "../screens"
-import { DemoNavigator, DemoTabParamList } from "./DemoNavigator" // @demo remove-current-line
+import { useStores } from "../models"
+import { AddNewTodoScreen, CalendarScreen, HomeScreen, LoginScreen } from "../screens"
 import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
 
 /**
@@ -43,9 +30,7 @@ import { navigationRef, useBackButtonHandler } from "./navigationUtilities"
  *   https://reactnavigation.org/docs/typescript/#organizing-types
  */
 export type AppStackParamList = {
-  Welcome: undefined
-  Login: undefined // @demo remove-current-line
-  Demo: NavigatorScreenParams<DemoTabParamList> // @demo remove-current-line
+  Login: undefined
   // 🔥 Your screens go here
   HomeScreen: undefined
   AddNewTodo: { focusDay?: Date; task?: Todo }
@@ -82,30 +67,23 @@ const AppStack = observer(function AppStack() {
   return (
     <Stack.Navigator
       screenOptions={{ headerShown: false }}
-      initialRouteName={isAuthenticated ? "HomeScreen" : "Login"} // @demo remove-current-line
+      initialRouteName={isAuthenticated ? "HomeScreen" : "Login"}
     >
-      {/* @demo remove-block-start */}
       {isAuthenticated ? (
         <>
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
           <Stack.Screen
             name="AddNewTodo"
-            component={AddNewTodo}
+            component={AddNewTodoScreen}
             options={{ presentation: "modal" }}
           />
           <Stack.Screen name="CalendarScreen" component={CalendarScreen} />
-          {/* @demo remove-block-end */}
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          {/* @demo remove-block-start */}
-          <Stack.Screen name="Demo" component={DemoNavigator} />
         </>
       ) : (
         <>
           <Stack.Screen name="Login" component={LoginScreen} />
         </>
       )}
-      {/* @demo remove-block-end */}
-      {/** 🔥 Your screens go here */}
     </Stack.Navigator>
   )
 })

@@ -15,7 +15,7 @@ import { useHeader } from "~/utils/useHeader"
 
 interface AddNewTodoProps extends AppStackScreenProps<"AddNewTodo"> {}
 
-const AddNewTodoScreen: FC<AddNewTodoProps> = observer(function AddNewTodoScreen(_props) {
+export const AddNewTodoScreen: FC<AddNewTodoProps> = observer(function AddNewTodoScreen(_props) {
   const { navigation, route } = _props
   const { focusDay, task } = route.params
   const actionSheet = useRef<AppActionSheetType>()
