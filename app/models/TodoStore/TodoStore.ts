@@ -14,7 +14,7 @@ export const TodoStoreModel = types
       const todosOfWeek = daysOfWeek.map((d) => {
         return {
           uuid: new Date(d).toISOString(),
-          todos: store.todos.filter((e) => isSameDay(e.updatedAt, d) && !e.completed),
+          todos: store.todos.filter((e) => isSameDay(e.updatedAt, d)),
         }
       }, {})
       return todosOfWeek
@@ -22,7 +22,7 @@ export const TodoStoreModel = types
     getTodos(day: Date) {
       return (
         store.todos
-          .filter((e) => isSameDay(e.updatedAt, day) && !e.completed)
+          .filter((e) => isSameDay(e.updatedAt, day))
           // sort by title
           .sort((a, b) => {
             const nameA = a.title.toUpperCase()

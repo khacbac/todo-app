@@ -14,15 +14,22 @@ import { DEFAULT_DATE_FORMAT, WINDOW_WIDTH } from "~/constants"
 import { useStores } from "~/models"
 import { Todo } from "~/models/TodoStore"
 import { colors, spacing } from "~/theme"
+import { useSafeAreaInsetsStyle } from "~/utils/useSafeAreaInsetsStyle"
 import { TodoItem } from "./TodoItem"
 
 type TodoItemProps = ListRenderItemInfo<Date>
 
 export const TodoList: FC<TodoItemProps> = observer(function TodoList(_props) {
   const { item } = _props
+  const $scrollSafeArea = useSafeAreaInsetsStyle(["bottom"])
   const {
     todoStore: { getTodos },
   } = useStores()
+
+  const $scrollStyle: ViewStyle[] = [
+    $contentContainerStyle,
+    { paddingBottom: (+$scrollSafeArea?.paddingBottom || 0) + 70 },
+  ]
 
   const renderItem: ListRenderItem<Todo> = (props) => {
     return <TodoItem {...props} />
@@ -34,8 +41,8 @@ export const TodoList: FC<TodoItemProps> = observer(function TodoList(_props) {
       <FlatList
         data={getTodos(item)}
         renderItem={renderItem}
-        keyExtractor={(_, index) => String(index)}
-        contentContainerStyle={$contentContainerStyle}
+        keyExtractor={(item, index) => `${item.uuid}-${index}`}
+        contentContainerStyle={$scrollStyle}
         ItemSeparatorComponent={() => <View style={$itemSeparator} />}
       />
     </View>

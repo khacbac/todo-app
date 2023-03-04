@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import { useNavigation } from "@react-navigation/native"
 import { observer } from "mobx-react-lite"
 import React, { FC } from "react"
@@ -32,9 +33,25 @@ export const TodoItem: FC<TodoItemProps> = observer(function TodoItem(_props) {
           text={`${item.title}`}
           size="sm"
           weight="semiBold"
-          style={{ color: getPriorityColor(item) }}
+          style={{
+            color: getPriorityColor(item),
+            ...(item.completed && {
+              textDecorationLine: "line-through",
+              textDecorationColor: getPriorityColor(item),
+            }),
+          }}
         />
-        <Text text={`${item.description}`} size="xxs" numberOfLines={2} weight="normal" />
+        <Text
+          text={`${item.description}`}
+          size="xxs"
+          numberOfLines={2}
+          weight="normal"
+          style={{
+            ...(item.completed && {
+              textDecorationLine: "line-through",
+            }),
+          }}
+        />
       </View>
     </TouchableOpacity>
   )
