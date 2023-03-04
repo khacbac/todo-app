@@ -12,7 +12,15 @@ export const TodoModel = types
     completed: false,
   })
   .actions(withSetPropAction)
-  .views((todo) => ({}))
+  .actions((store) => ({
+    toggle() {
+      store.completed = !store.completed
+    },
+    update(title: string, description: string) {
+      store.title = title
+      store.description = description
+    },
+  }))
 
 export interface Todo extends Instance<typeof TodoModel> {}
 export interface TodoSnapshotOut extends SnapshotOut<typeof TodoModel> {}

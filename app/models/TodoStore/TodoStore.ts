@@ -1,4 +1,4 @@
-import { format, isSameDay } from "date-fns"
+import { isSameDay } from "date-fns"
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
 import { getDaysOfAWeek } from "~/utils/common.utils"
 import { Todo, TodoModel } from "./TodoModel"
@@ -19,13 +19,13 @@ export const TodoStoreModel = types
       }, {})
       return todosOfWeek
     },
+    getTodos(day: Date) {
+      return store.todos.filter((e) => isSameDay(e.updatedAt, day) && !e.completed)
+    },
   }))
   .actions((store) => ({
     addTask(todo: Todo) {
       store.todos.push(todo)
-    },
-    completeTask(todo: Todo) {
-      todo.setProp("completed", true)
     },
   }))
 

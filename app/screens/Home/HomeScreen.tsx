@@ -9,21 +9,18 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { Button, Text, Toggle } from "~/components"
-import { DEFAULT_DATE_FORMAT, WINDOW_WIDTH } from "~/constants"
-import { useStores } from "~/models"
-import { Todo } from "~/models/TodoStore"
+import { Button, Text } from "~/components"
+import { WINDOW_WIDTH } from "~/constants"
 import { AppStackScreenProps } from "~/navigators"
 import { colors, spacing } from "~/theme"
+import { getDaysOfAWeek } from "~/utils/common.utils"
 import { useSafeAreaInsetsStyle } from "~/utils/useSafeAreaInsetsStyle"
+import { TodoList } from "./components"
 import useHomeScreen from "./useHomeScreen"
 
 interface HomeProps extends AppStackScreenProps<"HomeScreen"> {}
 
 const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
-  const {
-    todoStore: { completeTask, focusWeekTodos },
-  } = useStores()
   const $containerSafeArea = useSafeAreaInsetsStyle(["top"])
   const $buttonSafeArea = useSafeAreaInsetsStyle(["bottom"])
   const horizontalScrollRef = useRef<FlatList>()
@@ -33,32 +30,13 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
     states: { focusDay, setFocusDay },
   } = useHomeScreen()
 
-  const weekTodos = focusWeekTodos(focusDay)
-  const initIndex = weekTodos.findIndex((e) => isSameDay(new Date(e.uuid), focusDay))
-
-  const renderItem: ListRenderItem<Todo> = ({ item }) => {
-    return (
-      <View style={$itemWrapper}>
-        <Toggle
-          value={item.completed}
-          onValueChange={() => {
-            completeTask(item)
-          }}
-          variant="radio"
-        />
-        <View style={$itemContentWrapper}>
-          <Text text={`${item.title}`} size="sm" weight="semiBold" />
-          <Text text={`${item.description}`} size="xxs" numberOfLines={2} weight="normal" />
-        </View>
-      </View>
-    )
-  }
+  const daysOfWeek = getDaysOfAWeek(focusDay)
+  const initIndex = daysOfWeek.findIndex((e) => isSameDay(e, focusDay))
 
   const renderHeader = () => {
     return (
       <View style={$headerWrapper}>
-        {weekTodos.map((dt, i) => {
-          const day = new Date(dt.uuid)
+        {daysOfWeek.map((day, i) => {
           const isFocus = isSameDay(focusDay, day)
           return (
             <TouchableOpacity
@@ -79,13 +57,17 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
     )
   }
 
+  const renderItem: ListRenderItem<Date> = (props) => {
+    return <TodoList {...props} />
+  }
+
   return (
     <View style={[$container, $containerSafeArea]}>
       {renderHeader()}
       <View style={$separator} />
       <FlatList
         ref={horizontalScrollRef}
-        data={weekTodos}
+        data={daysOfWeek}
         horizontal
         pagingEnabled
         initialScrollIndex={initIndex}
@@ -94,31 +76,14 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
           offset: WINDOW_WIDTH * index,
           index,
         })}
-        renderItem={({ item }) => {
-          return (
-            <View style={{ width: WINDOW_WIDTH }}>
-              <Text
-                text={format(new Date(item.uuid), DEFAULT_DATE_FORMAT)}
-                style={$focusDayText}
-                weight="medium"
-              />
-              <FlatList
-                data={item.todos}
-                renderItem={renderItem}
-                keyExtractor={(_, index) => String(index)}
-                contentContainerStyle={$contentContainerStyle}
-                ItemSeparatorComponent={() => <View style={$itemSeparator} />}
-              />
-            </View>
-          )
-        }}
-        keyExtractor={(item) => String(item.uuid)}
+        renderItem={renderItem}
+        keyExtractor={(item) => item}
         onMomentumScrollEnd={(e) => {
           const { x } = e.nativeEvent.contentOffset
           const index = Math.floor(x / WINDOW_WIDTH)
-          const item = weekTodos.find((_, i) => i === index)
+          const item = daysOfWeek.find((_, i) => i === index)
           if (item) {
-            setFocusDay(new Date(item.uuid))
+            setFocusDay(item)
           }
         }}
       />
@@ -155,28 +120,6 @@ const $headerItemFocusWrapper: ViewStyle = {
   backgroundColor: colors.tint,
 }
 
-const $contentContainerStyle: ViewStyle = {
-  paddingTop: spacing.medium,
-  paddingHorizontal: spacing.medium,
-}
-
-const $itemSeparator: ViewStyle = {
-  height: 0.5,
-  backgroundColor: colors.border,
-  marginLeft: 40,
-}
-
-const $itemWrapper: ViewStyle = {
-  flexDirection: "row",
-  paddingVertical: spacing.small,
-}
-
-const $itemContentWrapper: ViewStyle = {
-  borderRadius: 16,
-  flex: 1,
-  marginLeft: spacing.small,
-}
-
 const $buttonWrapper: ViewStyle = { position: "absolute", bottom: 0, left: 16, right: 16 }
 const $button: ViewStyle = {
   marginBottom: spacing.extraSmall,
@@ -188,12 +131,6 @@ const $separator: ViewStyle = {
   marginHorizontal: spacing.medium,
   marginTop: spacing.extraSmall,
   marginBottom: spacing.tiny,
-}
-
-const $focusDayText: TextStyle = {
-  marginTop: spacing.extraSmall,
-  alignSelf: "center",
-  color: colors.tint,
 }
 
 const $headerDayText: TextStyle = { marginTop: spacing.tiny }

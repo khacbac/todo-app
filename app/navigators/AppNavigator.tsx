@@ -16,6 +16,7 @@ import { StackNavigationProp, StackScreenProps } from "@react-navigation/stack"
 import { observer } from "mobx-react-lite"
 import React from "react"
 import { useColorScheme } from "react-native"
+import { Todo } from "~/models/TodoStore"
 import { AddNewTodo } from "~/screens/AddNew"
 import Config from "../config"
 import { useStores } from "../models" // @demo remove-current-line
@@ -46,7 +47,7 @@ export type AppStackParamList = {
   Demo: NavigatorScreenParams<DemoTabParamList> // @demo remove-current-line
   // 🔥 Your screens go here
   HomeScreen: undefined
-  AddNewTodo: { focusDay: Date }
+  AddNewTodo: { focusDay?: Date; task?: Todo }
 }
 
 /**

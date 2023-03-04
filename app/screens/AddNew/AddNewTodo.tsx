@@ -14,22 +14,27 @@ interface AddNewTodoProps extends AppStackScreenProps<"AddNewTodo"> {}
 
 const AddNewTodoScreen: FC<AddNewTodoProps> = observer(function AddNewTodoScreen(_props) {
   const { navigation, route } = _props
-  const { focusDay } = route.params
+  const { focusDay, task } = route.params
   const {
     todoStore: { addTask },
   } = useStores()
-  const [title, setTitle] = useState("")
-  const [description, setDescription] = useState("")
+  const [title, setTitle] = useState(task?.title || "")
+  const [description, setDescription] = useState(task?.description || "")
 
   useHeader(
     {
-      title: format(focusDay, DEFAULT_DATE_FORMAT),
+      title: format(task?.updatedAt || focusDay, DEFAULT_DATE_FORMAT),
       leftTx: "common.cancel",
-      rightTx: "common.add",
+      rightTx: task ? "common.update" : "common.add",
       safeAreaEdges: [],
       onLeftPress: navigation.goBack,
       onRightPress: () => {
         if (title) {
+          if (task) {
+            task.update(title, description)
+            navigation.goBack()
+            return
+          }
           const todo = TodoModel.create({
             title,
             description,
@@ -54,6 +59,7 @@ const AddNewTodoScreen: FC<AddNewTodoProps> = observer(function AddNewTodoScreen
           onChangeText={setTitle}
           style={$input}
           autoFocus
+          value={title}
         />
         <View style={$indicator} />
         <TextField
@@ -62,6 +68,7 @@ const AddNewTodoScreen: FC<AddNewTodoProps> = observer(function AddNewTodoScreen
           multiline
           style={$descriptionInput}
           onChangeText={setDescription}
+          value={description}
         />
       </View>
     </View>
