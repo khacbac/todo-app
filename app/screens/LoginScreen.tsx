@@ -27,8 +27,8 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
   useEffect(() => {
     // Here is where you could fetch credentials from keychain or storage
     // and pre-fill the form fields.
-    setAuthEmail("ignite@infinite.red")
-    setAuthPassword("ign1teIsAwes0m3")
+    setAuthEmail("todo@kb.com")
+    setAuthPassword("123456")
   }, [])
 
   const errors: typeof validationErrors = isSubmitted ? validationErrors : ({} as any)
@@ -55,7 +55,7 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         return (
           <Icon
             icon={isAuthPasswordHidden ? "view" : "hidden"}
-            color={colors.palette.neutral800}
+            color={colors.white}
             containerStyle={props.style}
             onPress={() => setIsAuthPasswordHidden(!isAuthPasswordHidden)}
           />
@@ -117,7 +117,6 @@ export const LoginScreen: FC<LoginScreenProps> = observer(function LoginScreen(_
         testID="login-button"
         tx="loginScreen.tapToSignIn"
         style={$tapButton}
-        preset="reversed"
         onPress={login}
       />
     </Screen>
