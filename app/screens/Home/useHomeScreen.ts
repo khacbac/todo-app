@@ -11,7 +11,7 @@ const useHomeScreen = () => {
   }
 
   const gotoCalendar = () => {
-    navigation.navigate("CalendarScreen")
+    navigation.navigate("CalendarScreen", { date: focusDay, onSelect: setFocusDay })
   }
 
   return { gotoAddNewTodo, gotoCalendar, states: { focusDay, setFocusDay } }

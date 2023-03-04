@@ -80,6 +80,7 @@ export const colors = {
    * Error Background.
    *
    */
+  primary: palette.primary500,
   errorBackground: palette.angry100,
   white: "#ffffff",
   warmGray400: "#A8A29E",

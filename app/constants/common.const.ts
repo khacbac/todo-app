@@ -5,6 +5,7 @@ import { TaskPriotityEnum } from "~/types"
 export const WINDOW_WIDTH = Dimensions.get("window").width
 
 export const DEFAULT_DATE_FORMAT = "dd-MM-y"
+export const CALENDAR_DATE_FORMAT = "y-MM-dd"
 
 export const PRIORITY = {
   LOW: TaskPriotityEnum.LOW,

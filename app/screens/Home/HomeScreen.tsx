@@ -1,6 +1,6 @@
 import { format, isSameDay } from "date-fns"
 import { observer } from "mobx-react-lite"
-import React, { FC, useRef } from "react"
+import React, { FC, useEffect, useRef } from "react"
 import {
   FlatList,
   ListRenderItem,
@@ -33,6 +33,11 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
 
   const daysOfWeek = getDaysOfAWeek(focusDay)
   const initIndex = daysOfWeek.findIndex((e) => isSameDay(e, focusDay))
+
+  useEffect(() => {
+    const index = daysOfWeek.findIndex((e) => isSameDay(e, focusDay))
+    horizontalScrollRef.current?.scrollToIndex({ animated: false, index })
+  }, [focusDay, daysOfWeek])
 
   const renderHeader = () => {
     return (

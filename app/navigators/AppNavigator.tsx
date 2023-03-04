@@ -49,7 +49,7 @@ export type AppStackParamList = {
   // 🔥 Your screens go here
   HomeScreen: undefined
   AddNewTodo: { focusDay?: Date; task?: Todo }
-  CalendarScreen: undefined
+  CalendarScreen: { date: Date; onSelect: (date: Date) => void }
 }
 
 /**

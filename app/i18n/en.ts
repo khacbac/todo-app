@@ -7,6 +7,7 @@ const en = {
     add: "Add",
     update: "Update",
     delete: "Delete",
+    select: "Select",
   },
   welcomeScreen: {
     postscript:
