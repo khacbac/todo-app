@@ -21,6 +21,7 @@ import { AddNewTodo } from "~/screens/AddNew"
 import Config from "../config"
 import { useStores } from "../models" // @demo remove-current-line
 import {
+  CalendarScreen,
   HomeScreen,
   LoginScreen, // @demo remove-current-line
   WelcomeScreen,
@@ -48,6 +49,7 @@ export type AppStackParamList = {
   // 🔥 Your screens go here
   HomeScreen: undefined
   AddNewTodo: { focusDay?: Date; task?: Todo }
+  CalendarScreen: undefined
 }
 
 /**
@@ -91,6 +93,7 @@ const AppStack = observer(function AppStack() {
             component={AddNewTodo}
             options={{ presentation: "modal" }}
           />
+          <Stack.Screen name="CalendarScreen" component={CalendarScreen} />
           {/* @demo remove-block-end */}
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           {/* @demo remove-block-start */}

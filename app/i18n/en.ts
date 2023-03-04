@@ -130,6 +130,7 @@ const en = {
     titlePlh: "Task Name",
     descriptionPlh: "Description",
   },
+  calendar: { title: "Calendar" },
 }
 
 export default en

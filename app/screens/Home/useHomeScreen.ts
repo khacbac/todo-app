@@ -1,6 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
 import { useState } from "react"
-import { Todo } from "~/models/TodoStore"
 import { AppStackProps } from "~/navigators"
 
 const useHomeScreen = () => {
@@ -11,11 +10,11 @@ const useHomeScreen = () => {
     navigation.navigate("AddNewTodo", { focusDay })
   }
 
-  const gotoEditTodo = (task: Todo) => {
-    navigation.navigate("AddNewTodo", { task })
+  const gotoCalendar = () => {
+    navigation.navigate("CalendarScreen")
   }
 
-  return { gotoAddNewTodo, gotoEditTodo, states: { focusDay, setFocusDay } }
+  return { gotoAddNewTodo, gotoCalendar, states: { focusDay, setFocusDay } }
 }
 
 export default useHomeScreen

@@ -9,7 +9,7 @@ import {
   View,
   ViewStyle,
 } from "react-native"
-import { Button, Text } from "~/components"
+import { Button, Icon, Text } from "~/components"
 import { WINDOW_WIDTH } from "~/constants"
 import { AppStackScreenProps } from "~/navigators"
 import { colors, spacing } from "~/theme"
@@ -27,6 +27,7 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
 
   const {
     gotoAddNewTodo,
+    gotoCalendar,
     states: { focusDay, setFocusDay },
   } = useHomeScreen()
 
@@ -35,25 +36,30 @@ const HomeScreen: FC<HomeProps> = observer(function HomeScreen(_props) {
 
   const renderHeader = () => {
     return (
-      <View style={$headerWrapper}>
-        {daysOfWeek.map((day, i) => {
-          const isFocus = isSameDay(focusDay, day)
-          return (
-            <TouchableOpacity
-              activeOpacity={0.8}
-              key={String(i)}
-              style={[$headerItemWrapper, isFocus && $headerItemFocusWrapper]}
-              onPress={() => {
-                setFocusDay(day)
-                horizontalScrollRef.current?.scrollToIndex({ animated: false, index: i })
-              }}
-            >
-              <Text text={format(day, "EEE")} weight="semiBold" />
-              <Text text={format(day, "d")} style={$headerDayText} />
-            </TouchableOpacity>
-          )
-        })}
-      </View>
+      <>
+        <TouchableOpacity style={$calendarIconBtn} onPress={gotoCalendar}>
+          <Icon icon="settings" size={24} />
+        </TouchableOpacity>
+        <View style={$headerWrapper}>
+          {daysOfWeek.map((day, i) => {
+            const isFocus = isSameDay(focusDay, day)
+            return (
+              <TouchableOpacity
+                activeOpacity={0.8}
+                key={String(i)}
+                style={[$headerItemWrapper, isFocus && $headerItemFocusWrapper]}
+                onPress={() => {
+                  setFocusDay(day)
+                  horizontalScrollRef.current?.scrollToIndex({ animated: false, index: i })
+                }}
+              >
+                <Text text={format(day, "EEE")} weight="semiBold" />
+                <Text text={format(day, "d")} style={$headerDayText} />
+              </TouchableOpacity>
+            )
+          })}
+        </View>
+      </>
     )
   }
 
@@ -134,3 +140,9 @@ const $separator: ViewStyle = {
 }
 
 const $headerDayText: TextStyle = { marginTop: spacing.tiny }
+
+const $calendarIconBtn: ViewStyle = {
+  alignSelf: "flex-end",
+  marginRight: spacing.medium,
+  marginVertical: spacing.extraSmall,
+}
