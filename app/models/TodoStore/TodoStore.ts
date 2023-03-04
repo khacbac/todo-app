@@ -20,9 +20,24 @@ export const TodoStoreModel = types
       return todosOfWeek
     },
     getTodos(day: Date) {
-      return store.todos
-        .filter((e) => isSameDay(e.updatedAt, day) && !e.completed)
-        .sort((a, b) => a.priority - b.priority)
+      return (
+        store.todos
+          .filter((e) => isSameDay(e.updatedAt, day) && !e.completed)
+          // sort by title
+          .sort((a, b) => {
+            const nameA = a.title.toUpperCase()
+            const nameB = b.title.toUpperCase()
+            if (nameA < nameB) {
+              return -1
+            }
+            if (nameA > nameB) {
+              return 1
+            }
+            return 0
+          })
+          // sort by priority
+          .sort((a, b) => a.priority - b.priority)
+      )
     },
   }))
   .actions((store) => ({
