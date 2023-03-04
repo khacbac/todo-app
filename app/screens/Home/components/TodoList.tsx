@@ -23,8 +23,10 @@ export const TodoList: FC<TodoItemProps> = observer(function TodoList(_props) {
   const { item } = _props
   const $scrollSafeArea = useSafeAreaInsetsStyle(["bottom"])
   const {
-    todoStore: { getTodos },
+    todoStore: { getTodos, getStatistics },
   } = useStores()
+
+  const statistics = getStatistics(item)
 
   const $scrollStyle: ViewStyle[] = [
     $contentContainerStyle,
@@ -37,7 +39,13 @@ export const TodoList: FC<TodoItemProps> = observer(function TodoList(_props) {
 
   return (
     <View style={{ width: WINDOW_WIDTH }}>
-      <Text text={format(item, DEFAULT_DATE_FORMAT)} style={$focusDayText} weight="medium" />
+      <View style={$topHeader}>
+        <Text text={format(item, DEFAULT_DATE_FORMAT)} style={$focusDayText} weight="medium" />
+        <View style={$statisticsWrapper}>
+          <Text text={`${statistics.completed}/${statistics.total}`} weight="semiBold" />
+        </View>
+      </View>
+
       <FlatList
         data={getTodos(item)}
         renderItem={renderItem}
@@ -54,6 +62,16 @@ const $contentContainerStyle: ViewStyle = {
   paddingHorizontal: spacing.medium,
 }
 
+const $topHeader: ViewStyle = {
+  alignItems: "center",
+  marginTop: spacing.extraSmall,
+}
+
+const $statisticsWrapper: ViewStyle = {
+  position: "absolute",
+  right: spacing.medium,
+}
+
 const $itemSeparator: ViewStyle = {
   height: 0.5,
   backgroundColor: colors.border,
@@ -61,7 +79,6 @@ const $itemSeparator: ViewStyle = {
 }
 
 const $focusDayText: TextStyle = {
-  marginTop: spacing.extraSmall,
   alignSelf: "center",
   color: colors.tint,
 }

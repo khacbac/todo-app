@@ -40,6 +40,15 @@ export const TodoStoreModel = types
       )
     },
   }))
+  .views((store) => ({
+    getStatistics(day: Date) {
+      const todos = store.getTodos(day)
+      return {
+        completed: todos.filter((e) => e.completed).length,
+        total: todos.length,
+      }
+    },
+  }))
   .actions((store) => ({
     addTask(todo: Todo) {
       store.todos.push(todo)
