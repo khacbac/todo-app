@@ -1,4 +1,4 @@
-import { Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
+import { getRoot, Instance, SnapshotIn, SnapshotOut, types } from "mobx-state-tree"
 import { TaskPriotityEnum } from "~/types"
 import { withSetPropAction } from "../helpers/withSetPropAction"
 
@@ -22,6 +22,9 @@ export const TodoModel = types
       store.title = params.title
       store.description = params.description
       store.priority = params.priority
+    },
+    remove() {
+      getRoot<any>(store).todoStore.removeTodo(store)
     },
   }))
 

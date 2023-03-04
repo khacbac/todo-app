@@ -6,6 +6,7 @@ const en = {
     logOut: "Log Out", // @demo remove-current-line
     add: "Add",
     update: "Update",
+    delete: "Delete",
   },
   welcomeScreen: {
     postscript:

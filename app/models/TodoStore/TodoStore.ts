@@ -1,5 +1,5 @@
 import { isSameDay } from "date-fns"
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { destroy, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { getDaysOfAWeek } from "~/utils/common.utils"
 import { Todo, TodoModel } from "./TodoModel"
 
@@ -43,6 +43,9 @@ export const TodoStoreModel = types
   .actions((store) => ({
     addTask(todo: Todo) {
       store.todos.push(todo)
+    },
+    removeTodo(task) {
+      destroy(task)
     },
   }))
 

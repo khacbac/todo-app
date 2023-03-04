@@ -108,6 +108,18 @@ const AddNewTodoScreen: FC<AddNewTodoProps> = observer(function AddNewTodoScreen
             />
           )}
         />
+        {task && (
+          <Button
+            tx="common.delete"
+            preset="free"
+            textStyle={{ color: colors.error }}
+            onPress={() => {
+              task.remove()
+              navigation.goBack()
+            }}
+            style={$priorityBtn}
+          />
+        )}
       </View>
     )
   }
@@ -173,6 +185,7 @@ const $priorityContainer: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
   marginTop: spacing.extraSmall,
+  justifyContent: "space-between",
 }
 
 const $priorityBtn: ViewStyle = {}
